@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Order;
 use Illuminate\Http\Request;
+use \Datetime;
 
 class OrderController extends Controller
 {
@@ -16,9 +17,11 @@ class OrderController extends Controller
     {
         $all_orders = Order::select("comments")->GetExpectedShipDate()->get();
         foreach ($all_orders as $key => $val) {
-            $date_index = strpos ( $val->comments , 'Date');
-            $date_substr = substr($val->comments, $date_index);
-            echo $date_substr;
+            $date_index = strpos ( $val->comments , 'Date:');
+            $date_substr = substr($val->comments, $date_index + 5);
+
+            $formatted_date = date( "m-d-y", strtotime( $date_substr ) );
+            //echo $formatted_date;
         }
 
 
