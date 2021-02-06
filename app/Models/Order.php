@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Order extends Model
 {
+    public $timestamps = false;
     //
 
     public function scopeGetComments($query, $category)
@@ -34,5 +35,10 @@ class Order extends Model
             default:
                 break;
         }
+    }
+
+    public function scopeGetExpectedShipDate($query)
+    {
+        return $query->where('comments', 'LIKE', "%expected ship date%");
     }
 }
