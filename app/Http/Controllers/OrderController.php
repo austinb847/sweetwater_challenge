@@ -14,13 +14,22 @@ class OrderController extends Controller
      */
     public function index()
     {
-        $candy_orders = Order::select("*")->GetComments('candy')->get();
-        $call_orders = Order::select("*")->GetComments('call')->get();
-        $referred_orders = Order::select("*")->GetComments('referred')->get();
-        $signature_orders = Order::select("*")->GetComments('signature')->get();
-        $miscellaneous_orders = Order::select("*")->GetComments('miscellaneous')->get();
+        $all_orders = Order::select("comments")->GetExpectedShipDate()->get();
+        foreach ($all_orders as $key => $val) {
+            $date_index = strpos ( $val->comments , 'Date');
+            $date_substr = substr($val->comments, $date_index);
+            echo $date_substr;
+        }
+
+
+
+        // $candy_orders = Order::select("*")->GetComments('candy')->get();
+        // $call_orders = Order::select("*")->GetComments('call')->get();
+        // $referred_orders = Order::select("*")->GetComments('referred')->get();
+        // $signature_orders = Order::select("*")->GetComments('signature')->get();
+        // $miscellaneous_orders = Order::select("*")->GetComments('miscellaneous')->get();
         
-        return view('orders.index', compact('candy_orders', 'call_orders', 'referred_orders', 'signature_orders', 'miscellaneous_orders'));
+        // return view('orders.index', compact('candy_orders', 'call_orders', 'referred_orders', 'signature_orders', 'miscellaneous_orders'));
     }
 
     /**
