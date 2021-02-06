@@ -14,8 +14,4 @@ use App\Http\Controllers\OrderController;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
-
-Route::resource('orders', OrderController::class);
+Route::get('/', [OrderController::class, 'index']);
