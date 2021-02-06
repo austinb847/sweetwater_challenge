@@ -14,8 +14,13 @@ class OrderController extends Controller
      */
     public function index()
     {
-        $orders = Order::all();
-        return view('orders.index', compact('orders'));
+        $candy_orders = Order::select("*")->GetComments('candy')->get();
+        $call_orders = Order::select("*")->GetComments('call')->get();
+        $referred_orders = Order::select("*")->GetComments('referred')->get();
+        $signature_orders = Order::select("*")->GetComments('signature')->get();
+        $miscellaneous_orders = Order::select("*")->GetComments('miscellaneous')->get();
+        
+        return view('orders.index', compact('candy_orders', 'call_orders', 'referred_orders', 'signature_orders', 'miscellaneous_orders'));
     }
 
     /**
@@ -83,4 +88,6 @@ class OrderController extends Controller
     {
         //
     }
+
+
 }
