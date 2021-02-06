@@ -24,9 +24,13 @@ class Order extends Model
                 return $query->where('comments', 'LIKE', "%signature%");
             
             case 'miscellaneous':
-                return $query->where('comments', 'NOT LIKE', "%candy%" , 'and', 'comments', 'NOT LIKE', "%call%" , 'and', 'comments', 'NOT LIKE', "%referred%", 
-                                     'and', 'comments', 'NOT LIKE', "%signature%");
-            
+                $exclude_categorys = [
+                    ['comments' ,'not like','%'.'candy'.'%'],
+                    ['comments' ,'not like','%'.'call'.'%'],
+                    ['comments' ,'not like','%'.'referred'.'%'],
+                    ['comments' ,'not like','%'.'signature'.'%'],
+                ];
+                return $query->where($exclude_categorys);
             default:
                 break;
         }
