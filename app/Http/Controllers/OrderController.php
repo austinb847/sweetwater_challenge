@@ -15,24 +15,23 @@ class OrderController extends Controller
      */
     public function index()
     {
-        $all_orders = Order::select("comments")->GetExpectedShipDate()->get();
+        $all_orders = Order::select("*")->GetExpectedShipDate()->get();
         foreach ($all_orders as $key => $val) {
             $date_index = strpos ( $val->comments , 'Date:');
             $date_substr = substr($val->comments, $date_index + 5);
 
-            $formatted_date = date( "m-d-y", strtotime( $date_substr ) );
-            //echo $formatted_date;
+            $formatted_date = date( 'Y-m-d H:i:s', strtotime( $date_substr ) );
+            
+            Order::where('orderid', '=', $val->orderid)->update(['shipdate_expected' => $formatted_date], ['touch' => false]);
         }
 
-
-
-        // $candy_orders = Order::select("*")->GetComments('candy')->get();
-        // $call_orders = Order::select("*")->GetComments('call')->get();
-        // $referred_orders = Order::select("*")->GetComments('referred')->get();
-        // $signature_orders = Order::select("*")->GetComments('signature')->get();
-        // $miscellaneous_orders = Order::select("*")->GetComments('miscellaneous')->get();
+        $candy_orders = Order::select("*")->GetComments('candy')->get();
+        $call_orders = Order::select("*")->GetComments('call')->get();
+        $referred_orders = Order::select("*")->GetComments('referred')->get();
+        $signature_orders = Order::select("*")->GetComments('signature')->get();
+        $miscellaneous_orders = Order::select("*")->GetComments('miscellaneous')->get();
         
-        // return view('orders.index', compact('candy_orders', 'call_orders', 'referred_orders', 'signature_orders', 'miscellaneous_orders'));
+        return view('orders.index', compact('candy_orders', 'call_orders', 'referred_orders', 'signature_orders', 'miscellaneous_orders'));
     }
 
     /**
