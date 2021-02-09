@@ -17,6 +17,16 @@ class OrderController extends Controller
     public function index()
     {
 
+        $all_orders = Order::select("*")->GetExpectedShipDate()->get();
+        foreach ($all_orders as $key => $val) {
+            $date_index = strpos ( $val->comments , 'Date:');
+            $date_substr = substr($val->comments, $date_index + 5);
+
+            $formatted_date = date( 'Y-m-d H:i:s', strtotime( $date_substr ) );
+            
+            Order::where('orderid', '=', $val->orderid)->update(['shipdate_expected' => $formatted_date], ['touch' => false]);
+        }
+
         $orders_categories = Order::select( 'comments', 'orderid', 'shipdate_expected',
                                     DB::raw('
                                     CASE 
@@ -26,17 +36,7 @@ class OrderController extends Controller
                                         WHEN comments LIKE "%signature%" THEN "signature"
                                         ELSE "miscellaneous"
                                     END AS category'))->get();
-                                    
-        
-        foreach ($orders_categories as $key => $val) {
-            $date_index = strpos ( $val->comments , 'Date:');
-            $date_substr = substr($val->comments, $date_index + 5);
 
-            $formatted_date = date( 'Y-m-d H:i:s', strtotime( $date_substr ) );
-            
-            Order::where('orderid', '=', $val->orderid)->update(['shipdate_expected' => $formatted_date], ['touch' => false]);
-        }        
-        
         return view('orders.index', compact('orders_categories'));
     }
 
