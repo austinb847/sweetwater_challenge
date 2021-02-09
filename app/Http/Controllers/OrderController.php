@@ -30,9 +30,9 @@ class OrderController extends Controller
         $orders_categories = Order::select( 'comments', 'orderid', 'shipdate_expected',
                                     DB::raw('
                                     CASE 
-                                        WHEN comments LIKE "%candy%" THEN "candy"
+                                        WHEN comments LIKE "%candy%" or comments LIKE "%smarties%" or comments LIKE "%laffy%" or comments LIKE "%taffy%" THEN "candy"
                                         WHEN comments LIKE "%call me%" THEN "call_me"
-                                        WHEN comments LIKE "%referred%" THEN "referred"
+                                        WHEN comments LIKE "%referr%" THEN "referred"
                                         WHEN comments LIKE "%signature%" THEN "signature"
                                         ELSE "miscellaneous"
                                     END AS category'))->get();
